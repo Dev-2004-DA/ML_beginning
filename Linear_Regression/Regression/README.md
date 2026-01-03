@@ -1,116 +1,112 @@
-🏠 House Price Prediction – Regression Model Comparison
+🏠 House Price Prediction — Regression Model Exploration
 📌 Project Overview
 
-This project focuses on predicting house prices using the King County housing dataset.
-Multiple regression models were implemented, evaluated, and compared to understand:
-The impact of regularization
-The effect of polynomial features
-Whether dimensionality reduction (PCA) improves generalization
+This project explores regression-based machine learning approaches for predicting house prices using the King County housing dataset.
+The focus is not on achieving the highest possible R², but on understanding model behavior, bias–variance tradeoff, and the effect of feature engineering and regularization on generalization.
 
-How model complexity affects bias–variance tradeoff
-The goal was not to blindly maximize R², but to diagnose model behavior using proper ML principles.
+Multiple regression models were implemented, compared, and diagnosed using principled ML techniques.
 
 📂 Dataset
+
 Source: kc_house_data.csv
 Observations: 21,613 houses
 Target variable: price
-Initial features: 21 columns (numerical + date)
+Initial features: 21 (numerical + date)
 
-Feature preprocessing decisions:
-Dropped non-informative / leakage-prone features:
-id
-zipcod
-lat, long
-Removed weak or redundant categorical indicators:
+Preprocessing decisions
+
+Dropped identifiers and location-based leakage-prone features:
+id, zipcode, lat, long
+Removed weak or redundant indicators:
 waterfront, view
 Converted date to datetime and excluded from modeling
-Final feature set focused on structural house attributes
+Retained structural house attributes (size, condition, age, etc.)
 
-⚙️ Preprocessing Pipeline
-All models were built using scikit-learn Pipelines to prevent data leakage.
-Common preprocessing steps:
+⚙️ Modeling Pipeline
+
+All models were built using scikit-learn Pipelines to ensure reproducibility and prevent data leakage.
+Common steps across pipelines:
 StandardScaler for feature normalization
 Polynomial feature expansion (degree = 2) where applicable
-PowerTransformer for variance stabilization (in advanced pipeline)
-PCA to reduce multicollinearity and dimensionality
+Regularization (Ridge, Lasso, ElasticNet)
+PowerTransformer and PCA in advanced pipelines to address variance instability and multicollinearity
 
-🧠 Models Implemented
-The following regression models were trained and evaluated:
-1. Linear Regression (Baseline)
-2. Linear Regression + Ridge
-3. Linear Regression + Lasso
-4. Linear Regression + ElasticNet
-5. Polynomial Regression (degree = 2) + Linear Regression
-6. Polynomial Regression + ElasticNet
-7. Polynomial Regression + PCA + Linear Regression
+🧠 Models Explored
 
-Additional- used for loop to check best hyperparameter for  respective model's accuracy
+The following models were evaluated:
+Linear Regression (baseline)
+Linear Regression + Ridge
+Linear Regression + Lasso
+Linear Regression + ElasticNet
+Polynomial Regression (degree = 2) + Linear Regression
+Polynomial Regression + ElasticNet
+Polynomial Regression + PCA + Linear Regression
+Hyperparameters (e.g., regularization strength) were explored using controlled loops to observe their effect on training and test performance.
 
-Each model was evaluated on:
-Training R²
-Test R²
+📊 Evaluation Strategy
+
+Models were evaluated using:
+
+R²
 MAE
 RMSE
 
-📊 Model Performance Summary
-  Model	                Train R²	  Test R²
-Linear Regression	        62.41	    59.99
-LR + Ridge	              62.41	    59.99
-LR + Lasso	              62.41	    60.05
-LR + ElasticNet	          62.28	    60.52
-Polynomial + LR	          72.82	    63.63
-Polynomial + ElasticNet	  69.81	    64.91
-Polynomial + PCA + LR	    70.41	    65.61
+Evaluation was performed using:
 
-✅ Final Model Selection
+Train–test split (80/20)
 
-Best-performing model (based on test performance and generalization):
-🏆 Polynomial + PCA + Linear Regression
-Reasons:
-Highest test R² (65.61%)
-Lower RMSE compared to other models
-Reduced overfitting compared to raw polynomial regression
+5-fold cross-validation for robustness
 
-PCA helped mitigate multicollinearity introduced by polynomial features
+Cross-validation results (final pipeline):
+Mean CV R² ≈ 0.69
+Standard deviation ≈ 0.013
+This indicates stable generalization across folds.
 
-🔍 Key Observations & Learnings
-1. Linear models plateau early
-Training R² ≈ 62% across all linear variants
-Indicates bias limitation, not overfitting
+🔍 Diagnostics & Observations
+Bias–Variance Behavior
 
-3. Polynomial features improve fit
-Significant jump in training R²
-But raw polynomial regression shows overfitting
+Linear models plateaued at ~62% training R², indicating bias limitation
+Polynomial features improved training fit but increased variance
+Regularization reduced overfitting but had limited impact on bias
+PCA reduced redundancy introduced by polynomial expansion and improved stability
 
-3. Regularization + PCA improves generalization
-ElasticNet reduces overfitting
-PCA stabilizes polynomial expansion
-Best bias–variance balance achieved here
+Residual Analysis
 
-⚠️ Important Caveat (Read This)
+Residuals are centered around zero with no strong curvature
+Variance increases with predicted price (heteroscedasticity), which is typical for housing data
+No major systematic structure remains unmodeled
+These diagnostics suggest the models are reasonably specified, though uncertainty naturally increases for high-priced houses.
 
-Model comparison is based on a single train–test split.
-This means:
-Results are indicative, not definitive
-True performance should be validated using:
-K-Fold Cross-Validation
-Learning curves
-Residual diagnostics (already partially explored)
+📌 Key Takeaways
 
-Next logical step:
-Replace single split evaluation with cross-validated metrics.
+Increasing model complexity improves fit but must be controlled to avoid variance inflation
+Polynomial features are useful but introduce multicollinearity
+PCA can help stabilize expanded feature spaces when used judiciously
+Model comparison should prioritize generalization stability, not single-split performance
+No single model is claimed to be “the best”; results are context-dependent and reflect tradeoffs between bias, variance, and interpretability.
 
 🛠️ Tech Stack
 
-Python 3
-NumPy
-Pandas
-Seaborn & Matplotlib
+Python
+NumPy, Pandas
+Matplotlib, Seaborn
 scikit-learn
 
-📌 Conclusion (Honest)
+⚠️ Notes & Limitations
 
-This project demonstrates correct modeling workflow:
-Baseline first
+Results depend on the chosen feature set and preprocessing decisions
+Housing prices exhibit heteroscedasticity, limiting achievable accuracy
+Further improvements could include:
+Target transformation (e.g., log-price)
+Tree-based or ensemble models
+Spatial feature engineering
+
+📌 Conclusion
+
+This project demonstrates a structured machine learning workflow:
+Baseline modeling
 Incremental complexity
-Regularization before brute force
+Regularization and dimensionality reduction
+Cross-validation and diagnostic analysis
+
+The emphasis is on model reasoning and evaluation, not on declaring a universally optimal model.
