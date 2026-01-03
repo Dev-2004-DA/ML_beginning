@@ -114,7 +114,3 @@ This project demonstrates correct modeling workflow:
 Baseline first
 Incremental complexity
 Regularization before brute force
-
-PCA as a stabilizer, not a magic tool
-
-The final model is reasonable, defensible, and not overclaimed — which is exactly what interviewers and reviewers want to see.
