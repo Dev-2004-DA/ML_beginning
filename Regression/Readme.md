@@ -109,10 +109,9 @@ Residual non-normality is not a flaw — it is a reflection of real-world popula
 
 ---
 
-## 🎓 Interview Defense Line
+##
 > “The residuals are non-normal due to the bimodal nature of the target variable.  
 > 92% of the outliers belong to smokers. These are valid observations, and the Random Forest model successfully captures this variance.”
 
 ---
 
-⭐ If you find this useful, feel free to star the repository!
